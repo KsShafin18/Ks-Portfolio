@@ -40,7 +40,7 @@ const PROJECTS = [
     short: "A campus-focused lost and found website that helps students report and recover misplaced belongings quickly.",
     details: "DTI Lost and Found is a simple website developed specifically for the Daffodil Technical Institute campus to help students report and find lost or misplaced belongings. The project was created to make the lost-and-found process easier and more convenient for the campus community. This project secured 1st Prize at the Computer Science Project Showcase during the Daffodil Technical Institute Innovation & Exhibition.",
     tags: ["Django", "Campus App", "Problem Solving"],
-    image: "",
+    image: "assets/projects/1.jpg",
     github: "https://github.com/KsShafin18/DTI-Lost-and-Found-Website_2.0-Django-",
     demo: "",
     award: "1st Prize"
@@ -50,7 +50,7 @@ const PROJECTS = [
     short: "A student-friendly tool that simplifies lab report cover generation and saves time on repetitive formatting.",
     details: "Creating lab report covers at Daffodil Technical Institute can be a repetitive and time-consuming task for students, especially for newcomers who may find the formatting process confusing. The Dynamic Lab Report Generator was developed to make this process simpler, faster, and more convenient by helping students generate lab report covers with less effort. The goal of this project is to improve the student experience by making lab report cover creation easier and more accessible.",
     tags: ["Web App", "Automation", "Student Tools"],
-    image: "",
+    image: "assets/projects/2.jpg",
     github: "",
     demo: "https://dynamic-lab-report-generator-for-5glauqc9s-ks-shafin.vercel.app/",
     award: "Most Popular"
@@ -119,7 +119,6 @@ const SERVICES = [
   ["fa-mobile-screen", "Responsive UI Development", "Interfaces that work on every screen size."],
   ["fa-film", "Video Ad Editing", "Short-form edits and social media ads."]
 ];
-const WORKFLOW = [["Plan", "Define goals and scope"], ["Design", "Sketch layout and flow"], ["Develop", "Build features step by step"], ["Test", "Find and fix issues"], ["Deploy", "Launch and maintain"]];
 const TYPED_WORDS = ["Full-Stack Developer", "Python & Django Developer", "JavaScript Developer", "Creative Video Editor"];
 
 /* ---------- 2. HELPERS ---------- */
@@ -186,7 +185,6 @@ function render() {
     </article>
   `).join("");
   $("#serviceGrid").innerHTML = SERVICES.map(([i, t, d]) => `<article class="glass card reveal"><i class="fa-solid ${i} ic"></i><h3>${t}</h3><p>${d}</p></article>`).join("");
-  $("#flow").innerHTML = WORKFLOW.map(([t, d], i) => `<li class="step reveal"><b>${i + 1}</b><div><h3>${t}</h3><span>${d}</span></div></li>`).join("");
 
   let n = 0; // skill cards fly in from rotating directions
   $("#skillGroups").innerHTML = SKILLS.map(g => `
@@ -198,7 +196,10 @@ function render() {
     const imagePath = getProjectImagePath(index);
     return `
       <article class="glass proj reveal" data-from="up">
-        <div class="thumb">${imagePath ? `<img src="${esc(imagePath)}" alt="${esc(p.name)} thumbnail" loading="lazy">` : `<i class="fa-solid fa-laptop-code"></i>`}${p.award ? `<span class="badge">${esc(p.award)}</span>` : ""}</div>
+        <div class="thumb">
+          ${imagePath ? `<img class="proj-thumb-image" src="${esc(imagePath)}" alt="${esc(p.name)} thumbnail" loading="lazy">` : `<div class="project-fallback"><i class="fa-solid fa-laptop-code"></i></div>`}
+          ${p.award ? `<span class="badge">${esc(p.award)}</span>` : ""}
+        </div>
         <div class="pbody">
           <div class="proj-header">
             <h3>${esc(p.name)}</h3>
@@ -218,6 +219,17 @@ function render() {
         </div>
       </article>`;
   }).join("") : `<div class="state glass"><i class="fa-solid fa-folder-open"></i>No projects yet. Add one to the PROJECTS array in script.js.</div>`;
+
+  document.querySelectorAll(".proj-thumb-image").forEach((img) => {
+    img.addEventListener("error", () => {
+      const thumb = img.closest(".thumb");
+      if (!thumb) return;
+      const fallback = document.createElement("div");
+      fallback.className = "project-fallback";
+      fallback.innerHTML = '<i class="fa-solid fa-laptop-code"></i>';
+      img.replaceWith(fallback);
+    });
+  });
 
   $("#achGrid").innerHTML = ACHIEVEMENTS.length ? ACHIEVEMENTS.map(a => `
     <article class="glass card reveal" data-from="zoom"><i class="fa-solid ${esc(a.icon || "fa-trophy")} ic"></i>
