@@ -295,6 +295,8 @@ img{height:auto}.chip img{height:auto}
 .achievement-node{position:relative;z-index:1;display:grid;grid-template-columns:34px minmax(0,1fr);align-items:start;gap:10px;width:100%;min-height:82px;padding:12px;text-align:left;color:var(--w);background:rgba(12,22,35,.8);border:1px solid var(--bd);border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.2);cursor:pointer;transition:transform .25s var(--ease),border-color .25s ease,background .25s ease,box-shadow .25s ease}
 .achievement-node:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--branch-accent) 65%,transparent);background:rgba(18,31,47,.96);box-shadow:0 12px 26px rgba(0,0,0,.3)}
 .achievement-node:focus-visible{outline:2px solid var(--branch-accent);outline-offset:3px}
+.achievement-node.has-status{padding-top:32px}
+.achievement-status{position:absolute;top:7px;left:10px;padding:2px 7px;border:1px solid rgba(255,216,77,.45);border-radius:999px;color:var(--y);background:rgba(255,216,77,.12);font:700 .58rem/1.35 var(--bf);text-transform:uppercase}
 .achievement-node-icon{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;color:var(--branch-accent);background:color-mix(in srgb,var(--branch-accent) 12%,transparent)}
 .achievement-node-copy{display:grid;gap:6px;min-width:0}
 .achievement-node-copy strong{font:600 .78rem/1.35 var(--hf);overflow-wrap:anywhere}

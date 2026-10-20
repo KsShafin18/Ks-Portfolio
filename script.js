@@ -59,13 +59,14 @@ const PROJECTS = [
 
 const ACHIEVEMENTS = [
   { branch: "technical", category: "National Skill Development Authority", title: "Competent in Web Application Development with Python & Django", description: "Achieved the Competent level in Web Application Development with Python and Django through training at Esikhon Institute under the NSDA-related competency framework.", icon: "fa-code" },
-  { branch: "awards", category: "Daffodil Technical Institute", title: "1st Place — Computer Science Project Showcase", description: "Secured 1st place in the Computer Science Project Showcase at the Daffodil Technical Institute Innovation & Exhibition for developing a practical, student-focused project.", icon: "fa-trophy", highlight: true },
+  { branch: "technical", category: "Ostad - Learn Skills", title: "MERN Stack Development", description: "Currently pursuing MERN Stack Development through the Ostad online platform, with more than half of the course completed.", icon: "fa-laptop-code", status: "Ongoing" },
+  { branch: "awards", category: "Daffodil Technical Institute", title: "1st Place — Project Innovation & Exhibition-2026", description: "Secured 1st place in the Computer Science Project Showcase at the Daffodil Technical Institute Innovation & Exhibition for developing a practical, student-focused project.", icon: "fa-trophy", highlight: true },
   { branch: "institutional", category: "Media & Institutional Contribution", title: "Promotional Media Contributor — Daffodil Technical Institute", description: "Contributed to promotional media activities for Daffodil Technical Institute, supporting the institute's promotional content and communication initiatives.", icon: "fa-video" },
   { branch: "institutional", category: "Promotional Media Team", title: "Founder & Leader — DELTA-X Media Team, Daffodil Technical Institute Cultural Group", description: "Founder and leader of the DELTA-X Media Team within the Daffodil Technical Institute Cultural Group.", icon: "fa-video" },
   { branch: "communication", category: "Outreach & Communication", title: "Campaign Promotion & Audience Engagement", description: "Participated in several promotional campaigns organized by Daffodil Technical Institute, engaging directly with people, inviting potential participants, encouraging audience participation, and helping increase awareness and engagement with campaign activities. This experience strengthened interpersonal communication, public engagement, persuasion, and teamwork skills.", icon: "fa-bullhorn" },
   { branch: "awards", category: "PKSF Quiz Competition 2026", title: "Ranked 8th Among 100+ Competitors", description: "Achieved 8th place among more than 100 competitors at a PKSF quiz competition event, demonstrating analytical thinking, knowledge, and a competitive mindset.", icon: "fa-brain" },
   { branch: "communication", category: "Leadership & Communication", title: "Event Host & Presenter", description: "Hosted several events, gaining practical experience in public speaking, audience engagement, event coordination, and professional communication.", icon: "fa-microphone" },
-  { branch: "teamwork", category: "Teamwork & Presentation", title: "Presentation Team Member at AIUB", description: "Collaborated as a team member in a presentation at American International University-Bangladesh (AIUB), contributing to teamwork, idea sharing, and effective presentation delivery.", icon: "fa-people-group" },
+  { branch: "teamwork", category: "American International University-Bangladesh", title: "Presentation Team Member at AIUB", description: "Collaborated as a team member in a presentation at American International University-Bangladesh (AIUB), contributing to teamwork, idea sharing, and effective presentation delivery.", icon: "fa-people-group" },
   { branch: "teamwork", category: "eSikhon IT Institute — March 2026", title: "Host — Django Quiz Competition", description: "Served as host for a Django Quiz Competition at eSikhon Institute in March 2026, facilitating the event and engaging participants.", icon: "fa-microphone" }
 ];
 const ACHIEVEMENT_BRANCHES = [
@@ -260,9 +261,10 @@ function render() {
             ${ACHIEVEMENTS.map((achievement, index) => ({ achievement, index }))
               .filter(({ achievement }) => achievement.branch === branch.id)
               .map(({ achievement, index }) => `
-                <button class="achievement-node${achievement.highlight ? " is-highlight" : ""}" type="button"
+                <button class="achievement-node${achievement.highlight ? " is-highlight" : ""}${achievement.status ? " has-status" : ""}" type="button"
                   data-achievement-index="${index}" aria-expanded="false" aria-controls="achievementDetail"
-                  aria-label="${esc(achievement.title)}. ${esc(achievement.category)}. Show details">
+                  aria-label="${esc(achievement.title)}. ${esc(achievement.category)}${achievement.status ? `. ${esc(achievement.status)}` : ""}. Show details">
+                  ${achievement.status ? `<span class="achievement-status">${esc(achievement.status)}</span>` : ""}
                   <span class="achievement-node-icon"><i class="fa-solid ${achievement.icon}" aria-hidden="true"></i></span>
                   <span class="achievement-node-copy"><strong>${esc(achievement.title)}</strong><small>${esc(achievement.category)}</small></span>
                 </button>`).join("")}
