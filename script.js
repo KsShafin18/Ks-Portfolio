@@ -232,7 +232,7 @@ function render() {
           </div>
         </div>
       </article>`;
-  }).join("") : `<div class="state glass"><i class="fa-solid fa-folder-open"></i>No projects yet. Add one to the PROJECTS array in script.js.</div>`;
+  }).join("") : `<div class="state glass"><i class="fa-solid fa-folder-open"></i>No projects to display.</div>`;
 
   document.querySelectorAll(".proj-thumb-image").forEach((img) => {
     img.addEventListener("error", () => {
@@ -269,15 +269,13 @@ function render() {
     </div>`;
 
   // "Let's Connect" social cards (no URL => clearly marked placeholder, never an invented account)
-  $("#socialGrid").innerHTML = SOCIALS.map(([k, ic, name, c], i) => {
-    const v = CONTACT[k], tag = v ? "a" : "div";
-    const at = v ? `href="${esc(v)}" target="_blank" rel="noopener" aria-label="${name} profile"` : `aria-disabled="true" aria-label="${name} link not added yet"`;
-    return `<${tag} class="glass sc reveal${v ? "" : " empty"}" data-from="${FROM[i % 5]}" style="--c:${c};--d:${i * .08}s" ${at} data-tip="${v ? "Connect on " + name : "Add your " + name + " link in script.js"}"><i class="${ic}" aria-hidden="true"></i><span>${name}</span>${v ? "" : "<em>Add link</em>"}</${tag}>`;
+  $("#socialGrid").innerHTML = SOCIALS.filter(([key]) => CONTACT[key]).map(([key, ic, name, color], index) => {
+    return `<a class="glass sc reveal" data-from="${FROM[index % 5]}" style="--c:${color};--d:${index * .08}s" href="${esc(CONTACT[key])}" target="_blank" rel="noopener" aria-label="${name} profile" data-tip="Connect on ${name}"><i class="${ic}" aria-hidden="true"></i><span>${name}</span></a>`;
   }).join("");
   const em = CONTACT.email;
-  $("#contactList").innerHTML = `<div class="crow"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="v">${em ? `<a href="mailto:${esc(em)}">${esc(em)}</a>` : "Email not added yet"}</span><button class="copy" data-copy="${esc(em)}" ${em ? "" : "disabled"}>Copy</button></div>`;
+  $("#contactList").innerHTML = em ? `<div class="crow"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="v"><a href="mailto:${esc(em)}">${esc(em)}</a></span><button class="copy" data-copy="${esc(em)}">Copy</button></div>` : "";
   const btn = $("#contactBtn");
-  if (em) btn.href = `mailto:${em}`; else btn.setAttribute("aria-disabled", "true");
+  if (em) btn.href = `mailto:${em}`; else btn.hidden = true;
   $("#footSocial").innerHTML = SOCIALS.filter(r => CONTACT[r[0]]).map(([k, i, l]) => `<a href="${esc(CONTACT[k])}" aria-label="${l}" target="_blank" rel="noopener"><i class="${i}"></i></a>`).join("") + (em ? `<a href="mailto:${esc(em)}" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>` : "");
 }
 
@@ -310,10 +308,8 @@ async function fetchDirectoryCertificates() {
 }
 
 async function loadCerts() {
-  const st = $("#certState"), note = $("#certNote");
+  const st = $("#certState");
   const local = normalise(LOCAL_CERTS.map(c => ({ name: c.file.split("/").pop(), src: c.file, title: c.title, org: c.org, date: c.date })));
-
-  stateBox(st, "fa-spinner fa-spin", "Loading certificates…");
 
   try {
     const folderCerts = await fetchDirectoryCertificates();
@@ -329,13 +325,10 @@ async function loadCerts() {
       date: c.date || ""
     })));
 
-    note.textContent = "Loaded automatically from the certificates folder.";
-    stateBox(st, "fa-check-circle", "Certificates loaded.");
   } catch (e) {
     certs = local;
-    note.textContent = "Add JPG images to assets/certificates/ and refresh to show them automatically.";
     if (!local.length) {
-      stateBox(st, "fa-certificate", "No certificates yet.");
+      stateBox(st, "fa-certificate", "Certificate gallery is currently unavailable.");
     }
   }
 
