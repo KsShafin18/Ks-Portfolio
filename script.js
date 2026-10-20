@@ -52,7 +52,7 @@ const PROJECTS = [
     tags: ["Web App", "Automation", "Student Tools"],
     image: "assets/projects/2.jpg",
     github: "",
-    demo: "https://dynamic-lab-report-generator-for-5glauqc9s-ks-shafin.vercel.app/",
+    demo: "https://dynamic-lab-report-generator-for-dt.vercel.app/",
     award: "Most Popular"
   }
 ];

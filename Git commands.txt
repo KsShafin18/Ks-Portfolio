@@ -17,3 +17,5 @@ git commit -m "Initial portfolio website"
 git branch -M main
 git remote add origin https://github.com/YOUR-USERNAME/portfolio.git
 git push -u origin main
+
+git revert #newcommit name
