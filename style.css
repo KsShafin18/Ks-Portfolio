@@ -204,7 +204,13 @@ section{padding:clamp(64px,9vw,110px) 0}
   .lb-n{display:none}
   .lb-n.prev,.lb-n.next{display:block;position:absolute;bottom:18px}.lb-n.prev{left:calc(50% - 54px)}.lb-n.next{left:calc(50% + 10px)}
 }
-@media(max-width:480px){.skills{grid-template-columns:repeat(2,1fr)}.btn{width:100%;justify-content:center}}
+@media(max-width:480px){
+  .skills{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .skill{min-width:0;padding:10px 4px;font-size:.72rem;line-height:1.25;overflow-wrap:anywhere}
+  .skill .logo{height:25px;margin-bottom:5px;font-size:1.1rem;padding:2px 0}
+  .skill .logo img{width:auto;height:20px;max-width:100%;object-fit:contain}
+  .btn{width:100%;justify-content:center}
+}
 
 /* ===== REDUCED MOTION ===== */
 @media(prefers-reduced-motion:reduce){
@@ -217,7 +223,7 @@ section{padding:clamp(64px,9vw,110px) 0}
    ===================================================================== */
 :root{--ease:cubic-bezier(.22,1,.36,1);--dur:.4s}
 html{overflow-x:hidden}
-img{height:auto}.chip img,.skill .logo img{height:auto}
+img{height:auto}.chip img{height:auto}
 /* one transition recipe for every interactive element (hover-in and hover-out are equally smooth) */
 .reveal.done{transition:transform var(--dur) var(--ease),translate .35s var(--ease),scale .2s var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),background-color var(--dur) var(--ease);transition-delay:0s}
 .btn,.copy,.socials a,.top,.nav ul a,.lb button{transition:transform var(--dur) var(--ease),translate .35s var(--ease),scale .2s var(--ease),color .3s var(--ease),background-color .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
