@@ -88,7 +88,14 @@
 <!-- ACHIEVEMENTS -->
 <section id="achievements"><div class="wrap">
   <h2 class="title reveal" data-from="down">Achievements</h2>
-  <div class="grid g3" id="achGrid"></div>
+  <div class="achievement-map" id="achGrid"></div>
+  <section class="achievement-detail glass" id="achievementDetail" role="region" aria-live="polite" aria-labelledby="achievementDetailTitle" hidden>
+    <div class="achievement-detail-head">
+      <div><span id="achievementDetailCategory"></span><h3 id="achievementDetailTitle"></h3></div>
+      <button id="achievementDetailClose" type="button" aria-label="Close achievement details"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <p id="achievementDetailDescription"></p>
+  </section>
 </div></section>
 
 <!-- CERTIFICATES -->

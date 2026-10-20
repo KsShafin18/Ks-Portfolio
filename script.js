@@ -57,9 +57,22 @@ const PROJECTS = [
   }
 ];
 
-// 👉 ACHIEVEMENTS — empty on purpose. Example entry:
-// { title: "Title", desc: "What happened", year: "2025", org: "Organisation", link: "", icon: "fa-trophy" }
-const ACHIEVEMENTS = [];
+const ACHIEVEMENTS = [
+  { branch: "technical", category: "Technical Competency", title: "Competent in Web Application Development with Python & Django", description: "Achieved the Competent level in Web Application Development with Python and Django through training at Esikhon Institute under the NSDA-related competency framework.", icon: "fa-code" },
+  { branch: "awards", category: "Awards & Recognition", title: "1st Place — Computer Science Project Showcase", description: "Secured 1st place in the Computer Science Project Showcase at the Daffodil Technical Institute Innovation & Exhibition for developing a practical, student-focused project.", icon: "fa-trophy", highlight: true },
+  { branch: "institutional", category: "Media & Institutional Contribution", title: "Promotional Media Contributor — Daffodil Technical Institute", description: "Contributed to promotional media activities for Daffodil Technical Institute, supporting the institute's promotional content and communication initiatives.", icon: "fa-video" },
+  { branch: "communication", category: "Outreach & Communication", title: "Campaign Promotion & Audience Engagement", description: "Participated in several promotional campaigns organized by Daffodil Technical Institute, engaging directly with people, inviting potential participants, encouraging audience participation, and helping increase awareness and engagement with campaign activities. This experience strengthened interpersonal communication, public engagement, persuasion, and teamwork skills.", icon: "fa-bullhorn" },
+  { branch: "awards", category: "Competition & Achievement", title: "Ranked 8th Among 100+ Competitors", description: "Achieved 8th place among more than 100 competitors at a PKSF quiz competition event, demonstrating analytical thinking, knowledge, and a competitive mindset.", icon: "fa-brain" },
+  { branch: "communication", category: "Leadership & Communication", title: "Event Host & Presenter", description: "Hosted several events, gaining practical experience in public speaking, audience engagement, event coordination, and professional communication.", icon: "fa-microphone" },
+  { branch: "teamwork", category: "Teamwork & Presentation", title: "Presentation Team Member at AIUB", description: "Collaborated as a team member in a presentation at American International University-Bangladesh (AIUB), contributing to teamwork, idea sharing, and effective presentation delivery.", icon: "fa-people-group" }
+];
+const ACHIEVEMENT_BRANCHES = [
+  { id: "technical", title: "Technical Skills", icon: "fa-laptop-code" },
+  { id: "awards", title: "Awards & Competition", icon: "fa-award" },
+  { id: "institutional", title: "Institutional Contribution", icon: "fa-building" },
+  { id: "communication", title: "Communication & Outreach", icon: "fa-comments" },
+  { id: "teamwork", title: "Teamwork & Presentation", icon: "fa-people-group" }
+];
 
 // 👉 SKILLS — "Name|icon". icon = "dev:name[:variant]" (Devicon logo) or a Font Awesome class.
 const SKILLS = [
@@ -152,6 +165,7 @@ async function loadProjectImages() {
 
     PROJECT_IMAGE_MAP = map;
     render();
+    observe();
   } catch (error) {
     PROJECT_IMAGE_MAP = {};
   }
@@ -231,12 +245,28 @@ function render() {
     });
   });
 
-  $("#achGrid").innerHTML = ACHIEVEMENTS.length ? ACHIEVEMENTS.map(a => `
-    <article class="glass card reveal" data-from="zoom"><i class="fa-solid ${esc(a.icon || "fa-trophy")} ic"></i>
-      <h3>${esc(a.title)}</h3><p>${esc(a.desc)}</p>
-      <p><small>${[a.org, a.year].filter(Boolean).map(esc).join(" · ")}</small></p>
-      ${a.link ? `<div class="links"><a href="${esc(a.link)}" target="_blank" rel="noopener">View proof<i class="fa-solid fa-arrow-right"></i></a></div>` : ""}</article>`).join("")
-    : `<div class="state glass reveal" data-from="zoom"><i class="fa-solid fa-flag-checkered"></i>Every milestone starts with a goal. My achievements will be showcased here as I continue to grow.</div>`;
+  $("#achGrid").innerHTML = `
+    <div class="achievement-root glass reveal" data-from="down">
+      <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+      <div><span>THE JOURNEY SO FAR</span><h3>My Achievements &amp; Experiences</h3></div>
+    </div>
+    <div class="achievement-branches">
+      ${ACHIEVEMENT_BRANCHES.map(branch => `
+        <section class="achievement-branch reveal" data-from="up">
+          <h3><i class="fa-solid ${branch.icon}" aria-hidden="true"></i>${esc(branch.title)}</h3>
+          <div class="achievement-nodes">
+            ${ACHIEVEMENTS.map((achievement, index) => ({ achievement, index }))
+              .filter(({ achievement }) => achievement.branch === branch.id)
+              .map(({ achievement, index }) => `
+                <button class="achievement-node${achievement.highlight ? " is-highlight" : ""}" type="button"
+                  data-achievement-index="${index}" aria-expanded="false" aria-controls="achievementDetail"
+                  aria-label="${esc(achievement.title)}. ${esc(achievement.category)}. Show details">
+                  <span class="achievement-node-icon"><i class="fa-solid ${achievement.icon}" aria-hidden="true"></i></span>
+                  <span class="achievement-node-copy"><strong>${esc(achievement.title)}</strong><small>${esc(achievement.category)}</small></span>
+                </button>`).join("")}
+          </div>
+        </section>`).join("")}
+    </div>`;
 
   // "Let's Connect" social cards (no URL => clearly marked placeholder, never an invented account)
   $("#socialGrid").innerHTML = SOCIALS.map(([k, ic, name, c], i) => {
@@ -390,6 +420,37 @@ function initParticles() {
 }
 
 document.addEventListener("click", e => {
+  const achievementButton = e.target.closest(".achievement-node");
+  if (achievementButton) {
+    const detail = $("#achievementDetail");
+    const isOpen = achievementButton.getAttribute("aria-expanded") === "true";
+    document.querySelectorAll(".achievement-node").forEach(node => node.setAttribute("aria-expanded", "false"));
+    if (isOpen) {
+      detail.hidden = true;
+      detail.classList.remove("is-open");
+      return;
+    }
+    const achievement = ACHIEVEMENTS[Number(achievementButton.dataset.achievementIndex)];
+    if (!achievement) return;
+    $("#achievementDetailCategory").textContent = achievement.category;
+    $("#achievementDetailTitle").textContent = achievement.title;
+    $("#achievementDetailDescription").textContent = achievement.description;
+    achievementButton.setAttribute("aria-expanded", "true");
+    detail.hidden = false;
+    detail.classList.add("is-open");
+    return;
+  }
+
+  const achievementClose = e.target.closest("#achievementDetailClose");
+  if (achievementClose) {
+    const selectedNode = $(".achievement-node[aria-expanded='true']");
+    $("#achievementDetail").hidden = true;
+    $("#achievementDetail").classList.remove("is-open");
+    selectedNode?.setAttribute("aria-expanded", "false");
+    selectedNode?.focus();
+    return;
+  }
+
   const copyBtn = e.target.closest(".copy"); if (copyBtn && !copyBtn.disabled) {
     navigator.clipboard.writeText(copyBtn.dataset.copy).then(() => toast("Copied to clipboard"), () => toast("Copy failed — select the text manually"));
   }
