@@ -5,6 +5,7 @@ const path = require("path");
 const rootDir = __dirname;
 const port = Number(process.env.PORT) || 3000;
 const certDir = path.join(rootDir, "assets", "certificates");
+const projectDir = path.join(rootDir, "assets", "projects");
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -39,6 +40,19 @@ function listCertificates() {
       name: entry.name,
       title: titleFromFilename(entry.name),
       src: `/assets/certificates/${encodeURIComponent(entry.name)}`
+    }));
+}
+
+function listProjectImages() {
+  if (!fs.existsSync(projectDir)) return [];
+
+  return fs
+    .readdirSync(projectDir, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && /\.(jpe?g|png|webp|svg)$/i.test(entry.name))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((entry) => ({
+      name: entry.name,
+      src: `/assets/projects/${encodeURIComponent(entry.name)}`
     }));
 }
 
@@ -83,6 +97,15 @@ const server = http.createServer((req, res) => {
       "Cache-Control": "no-store"
     });
     res.end(JSON.stringify(listCertificates()));
+    return;
+  }
+
+  if (pathname === "/api/projects") {
+    res.writeHead(200, {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
+    });
+    res.end(JSON.stringify(listProjectImages()));
     return;
   }
 

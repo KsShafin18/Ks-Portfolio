@@ -126,6 +126,20 @@ section{padding:clamp(64px,9vw,110px) 0}
 .badge{position:absolute;top:10px;left:10px;font-size:.7rem;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.55);color:var(--y);border:1px solid rgba(255,216,77,.4);font-family:var(--bf)}
 .pbody{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
 .pbody h3{font:700 1.15rem var(--hf)}.pbody p{color:var(--g);font-size:.92rem;flex:1}
+.proj-header{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.proj-live-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;color:var(--y);text-decoration:none;transition:color .25s ease,transform .25s ease}
+.proj-live-link:hover{color:#fff;transform:translateX(2px)}
+.proj-short{color:var(--g);font-size:.92rem;line-height:1.6}
+.proj-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:4px}
+.proj-toggle{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.04);color:var(--w);padding:9px 14px;border-radius:9px;cursor:pointer;font:600 .82rem var(--bf);transition:all .25s ease}
+.proj-toggle:hover,.proj-toggle.open{border-color:rgba(255,216,77,.5);color:var(--y);box-shadow:0 0 18px rgba(255,216,77,.08)}
+.proj-link{display:inline-flex;align-items:center;gap:6px;color:var(--y);font-weight:700;font-size:.8rem;transition:color .25s ease,transform .25s ease}
+.proj-link i{transition:transform .25s ease}
+.proj-link:hover{color:#fff}.proj-link:hover i{transform:translateX(4px)}
+.proj-link.emphasize{padding:10px 12px;border-radius:9px;background:rgba(255,216,77,.08);border:1px solid rgba(255,216,77,.28)}
+.proj-extra{margin-top:8px;padding-top:12px;border-top:1px solid var(--bd);display:grid;gap:12px}
+.proj-extra[hidden]{display:none}
+.proj-extra p{color:var(--g);font-size:.9rem;line-height:1.7}
 .tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{font-size:.75rem;padding:3px 9px;border-radius:6px;border:1px solid var(--bd);color:#cdd6e0;background:rgba(255,255,255,.04)}
 .links{display:flex;gap:18px;font-size:.9rem;font-weight:600}
 .links a{color:var(--y)}.links a i{transition:transform .25s;margin-left:4px}.links a:hover i{transform:translateX(4px)}

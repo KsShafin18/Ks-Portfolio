@@ -33,11 +33,28 @@ const LOCAL_CERTS = [
   { file: "assets/certificates/NSDA WADP Level 4.jpg", title: "NSDA WADP Level 4", org: "", date: "" }
 ];
 
-// 👉 PROJECTS — add real projects here. `sample:true` marks placeholder cards; delete them.
-// Set `image` to a path like "assets/projects/app.png" (optional).
+// Project cards for the portfolio. Each item includes a short intro, details, and external links.
 const PROJECTS = [
-  { sample: true, name: "Sample Project One", desc: "Placeholder card. Replace with a real project description.", tags: ["Python", "Django"], image: "", github: "", demo: "" },
-  { sample: true, name: "Sample Project Two", desc: "Placeholder card. Replace with a real project description.", tags: ["React", "Node.js"], image: "", github: "", demo: "" }
+  {
+    name: "DTI Lost and Found",
+    short: "A campus-focused lost and found website that helps students report and recover misplaced belongings quickly.",
+    details: "DTI Lost and Found is a simple website developed specifically for the Daffodil Technical Institute campus to help students report and find lost or misplaced belongings. The project was created to make the lost-and-found process easier and more convenient for the campus community. This project secured 1st Prize at the Computer Science Project Showcase during the Daffodil Technical Institute Innovation & Exhibition.",
+    tags: ["Django", "Campus App", "Problem Solving"],
+    image: "",
+    github: "https://github.com/KsShafin18/DTI-Lost-and-Found-Website_2.0-Django-",
+    demo: "",
+    award: "1st Prize"
+  },
+  {
+    name: "Dynamic Lab Report Generator",
+    short: "A student-friendly tool that simplifies lab report cover generation and saves time on repetitive formatting.",
+    details: "Creating lab report covers at Daffodil Technical Institute can be a repetitive and time-consuming task for students, especially for newcomers who may find the formatting process confusing. The Dynamic Lab Report Generator was developed to make this process simpler, faster, and more convenient by helping students generate lab report covers with less effort. The goal of this project is to improve the student experience by making lab report cover creation easier and more accessible.",
+    tags: ["Web App", "Automation", "Student Tools"],
+    image: "",
+    github: "",
+    demo: "https://dynamic-lab-report-generator-for-5glauqc9s-ks-shafin.vercel.app/",
+    award: "Most Popular"
+  }
 ];
 
 // 👉 ACHIEVEMENTS — empty on purpose. Example entry:
@@ -111,6 +128,35 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const MONO = ["django", "express", "github"]; // dark logos shown in white
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const FROM = ["up", "left", "right", "down", "zoom"];
+let PROJECT_IMAGE_MAP = {};
+
+function getProjectImagePath(index) {
+  if (PROJECTS[index] && PROJECTS[index].image) return PROJECTS[index].image;
+  return PROJECT_IMAGE_MAP[index] || "";
+}
+
+async function loadProjectImages() {
+  try {
+    const res = await fetch("/api/projects");
+    if (!res.ok) return;
+    const files = await res.json();
+    const map = {};
+
+    files.forEach((file) => {
+      const match = file.name.match(/^(\d+)/i);
+      if (!match) return;
+      const idx = Number(match[1]) - 1;
+      if (Number.isInteger(idx) && idx >= 0 && idx < PROJECTS.length) {
+        map[idx] = file.src;
+      }
+    });
+
+    PROJECT_IMAGE_MAP = map;
+    render();
+  } catch (error) {
+    PROJECT_IMAGE_MAP = {};
+  }
+}
 
 function icon(spec) {
   if (spec.startsWith("dev:")) {
@@ -148,13 +194,30 @@ function render() {
     <div class="skills">${g.items.map(s => { const [name, ic] = s.split("|"); const d = (n % 6) * 0.07; return `<div class="glass skill reveal" data-from="${FROM[n++ % 5]}" style="--d:${d}s"><div class="logo">${icon(ic)}</div>${esc(name)}</div>`; }).join("")}</div></div>`).join("");
 
   const ph = `<div class="thumb"><i class="fa-solid fa-image"></i></div>`;
-  $("#projectGrid").innerHTML = PROJECTS.length ? PROJECTS.map(p => `
-    <article class="glass proj reveal" data-from="up">
-      <div class="thumb">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)} thumbnail" loading="lazy">` : `<i class="fa-solid fa-laptop-code"></i>`}${p.sample ? `<span class="badge">Sample placeholder</span>` : ""}</div>
-      <div class="pbody"><h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p>
-      <div class="tags">${(p.tags || []).map(t => `<span>${esc(t)}</span>`).join("")}</div>
-      <div class="links">${p.github ? `<a href="${esc(p.github)}" target="_blank" rel="noopener">GitHub<i class="fa-solid fa-arrow-right"></i></a>` : ""}${p.demo ? `<a href="${esc(p.demo)}" target="_blank" rel="noopener">Live demo<i class="fa-solid fa-arrow-right"></i></a>` : ""}</div></div>
-    </article>`).join("") : `<div class="state glass"><i class="fa-solid fa-folder-open"></i>No projects yet. Add one to the PROJECTS array in script.js.</div>`;
+  $("#projectGrid").innerHTML = PROJECTS.length ? PROJECTS.map((p, index) => {
+    const imagePath = getProjectImagePath(index);
+    return `
+      <article class="glass proj reveal" data-from="up">
+        <div class="thumb">${imagePath ? `<img src="${esc(imagePath)}" alt="${esc(p.name)} thumbnail" loading="lazy">` : `<i class="fa-solid fa-laptop-code"></i>`}${p.award ? `<span class="badge">${esc(p.award)}</span>` : ""}</div>
+        <div class="pbody">
+          <div class="proj-header">
+            <h3>${esc(p.name)}</h3>
+            ${p.demo ? `<a class="proj-live-link" href="${esc(p.demo)}" target="_blank" rel="noopener">Click to View</a>` : ""}
+          </div>
+          <p class="proj-short">${esc(p.short)}</p>
+          <div class="tags">${(p.tags || []).map(t => `<span>${esc(t)}</span>`).join("")}</div>
+          <div class="proj-actions">
+            <button class="proj-toggle" type="button" data-project-index="${index}">More Info</button>
+            ${p.github ? `<a class="proj-link" href="${esc(p.github)}" target="_blank" rel="noopener">View on GitHub <i class="fa-solid fa-arrow-right"></i></a>` : ""}
+            ${p.demo && !p.github ? `<a class="proj-link emphasize" href="${esc(p.demo)}" target="_blank" rel="noopener">View Site <i class="fa-solid fa-arrow-right"></i></a>` : ""}
+          </div>
+          <div class="proj-extra" hidden>
+            <p>${esc(p.details)}</p>
+            ${p.demo ? `<a class="proj-link emphasize" href="${esc(p.demo)}" target="_blank" rel="noopener">Click Here to Visit <i class="fa-solid fa-arrow-right"></i></a>` : ""}
+          </div>
+        </div>
+      </article>`;
+  }).join("") : `<div class="state glass"><i class="fa-solid fa-folder-open"></i>No projects yet. Add one to the PROJECTS array in script.js.</div>`;
 
   $("#achGrid").innerHTML = ACHIEVEMENTS.length ? ACHIEVEMENTS.map(a => `
     <article class="glass card reveal" data-from="zoom"><i class="fa-solid ${esc(a.icon || "fa-trophy")} ic"></i>
@@ -315,8 +378,19 @@ function initParticles() {
 }
 
 document.addEventListener("click", e => {
-  const b = e.target.closest(".copy"); if (!b || b.disabled) return;
-  navigator.clipboard.writeText(b.dataset.copy).then(() => toast("Copied to clipboard"), () => toast("Copy failed — select the text manually"));
+  const copyBtn = e.target.closest(".copy"); if (copyBtn && !copyBtn.disabled) {
+    navigator.clipboard.writeText(copyBtn.dataset.copy).then(() => toast("Copied to clipboard"), () => toast("Copy failed — select the text manually"));
+  }
+
+  const toggleBtn = e.target.closest(".proj-toggle");
+  if (toggleBtn) {
+    const card = toggleBtn.closest(".proj");
+    const extra = card.querySelector(".proj-extra");
+    const isHidden = extra.hidden;
+    extra.hidden = !isHidden;
+    toggleBtn.textContent = isHidden ? "Less Info" : "More Info";
+    toggleBtn.classList.toggle("open", isHidden);
+  }
 });
 $("#toTop").onclick = () => scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
 $("#profile").addEventListener("error", () => $("#frame").classList.add("missing")); // shows "KS" until assets/profile.png exists
@@ -346,4 +420,4 @@ function initPointer() {
 
 /* ---------- 7. INIT ---------- */
 $("#year").textContent = new Date().getFullYear();
-render(); observe(); initNav(); initPointer(); initTyped(); initParticles(); loadCerts();
+render(); observe(); initNav(); initPointer(); initTyped(); initParticles(); loadProjectImages(); loadCerts();
