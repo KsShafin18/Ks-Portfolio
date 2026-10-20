@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KS SHAFIN — Full-Stack Developer Portfolio</title>
+<meta name="description" content="Portfolio of MD Khairul Sarder Shafin (KS Shafin): Python, Django, Node.js, React and creative video editing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#about">Skip to content</a>
+<div class="particles" id="particles" aria-hidden="true"></div>
+
+<!-- Floating nav: hidden on the hero, slides in after scrolling (see script.js) -->
+<header class="nav" id="nav">
+  <a class="brand" href="#home">KS<span>.</span></a>
+  <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="links"><i class="fa-solid fa-bars"></i></button>
+  <ul id="links">
+    <li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li><li><a href="#achievements">Achievements</a></li>
+    <li><a href="#certificates">Certificates</a></li><li><a href="#contact">Contact</a></li>
+  </ul>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div class="orbit reveal" data-from="left">
+      <span class="ring"></span><span class="ring r2"></span><span class="orb o1"></span><span class="orb o2"></span>
+      <div class="frame" id="frame">
+        <!-- 👉 PROFILE IMAGE: put your photo at assets/profile.png (or change src) -->
+        <img src="assets/profile.png" alt="Portrait of MD Khairul Sarder Shafin" id="profile">
+      </div>
+      <span class="chip" style="--x:14px;--y:-18px;--t:7s;top:2%;left:6%" title="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python logo"></span>
+      <span class="chip" style="--x:-16px;--y:14px;--t:9s;top:8%;right:0" title="React"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React logo"></span>
+      <span class="chip" style="--x:18px;--y:16px;--t:8s;bottom:6%;left:0" title="Node.js"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js logo"></span>
+      <span class="chip mono" style="--x:-14px;--y:-16px;--t:10s;bottom:2%;right:8%" title="Django"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="Django logo"></span>
+    </div>
+    <div class="intro">
+      <p class="label reveal" data-from="down">FULL-STACK DEVELOPER • WEB TECHNOLOGIES • CREATIVE DIGITAL MEDIA</p>
+      <h1 class="name reveal" data-from="down" style="--d:.1s">MD KHAIRUL SARDER SHAFIN</h1>
+      <h2 class="alias reveal" data-from="down" style="--d:.2s">KS SHAFIN</h2>
+      <p class="typed reveal" data-from="down" style="--d:.3s" aria-live="off"><span id="typed"></span><i class="caret"></i></p>
+      <p class="lead reveal" data-from="down" style="--d:.4s">I'm a passionate developer focused on building modern web applications, scalable backend systems, and engaging digital experiences. I work with Python, Django, Node.js, React, and database technologies, while combining technical skills with creative video editing to deliver polished digital solutions.</p>
+      <div class="btns reveal" data-from="down" style="--d:.5s">
+        <a class="btn" href="#projects">Explore My Work <i class="fa-solid fa-arrow-right"></i></a>
+        <a class="btn" href="#contact">Contact Me <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about"><div class="wrap">
+  <h2 class="title reveal" data-from="down">About Me</h2>
+  <div class="glass about reveal" data-from="left">
+    <p>I enjoy turning ideas into working software, from the database and API layer to the interface people actually touch. My interests sit in modern web technologies: Python and Django on the backend, Node.js for flexible services, and React for component-driven interfaces.</p>
+    <p>I approach problems by breaking them into small, testable steps, reading errors carefully, and improving a solution until it is clear and maintainable. Alongside development, I edit video, which helps me think about pacing, presentation and polish in everything I build.</p>
+  </div>
+  <div class="grid g3" id="aboutCards"></div>
+</div></section>
+
+<!-- SKILLS -->
+<section id="skills"><div class="wrap">
+  <h2 class="title reveal" data-from="down">Skills &amp; Tools</h2>
+  <p class="sub reveal" data-from="down">Technologies I work with. Edit the list in <code>script.js</code>.</p>
+  <div id="skillGroups"></div>
+</div></section>
+
+<!-- PROJECTS -->
+<section id="projects"><div class="wrap">
+  <h2 class="title reveal" data-from="down">Projects</h2>
+  <div class="grid g3" id="projectGrid"></div>
+</div></section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements"><div class="wrap">
+  <h2 class="title reveal" data-from="down">Achievements</h2>
+  <div class="grid g3" id="achGrid"></div>
+</div></section>
+
+<!-- CERTIFICATES -->
+<section id="certificates"><div class="wrap">
+  <h2 class="title reveal" data-from="down">Certificates</h2>
+  <p class="sub reveal" data-from="down" id="certNote"></p>
+  <div class="state glass" id="certState" role="status"></div>
+  <div class="grid g3" id="certGrid"></div>
+</div></section>
+
+<!-- SERVICES -->
+<section id="services"><div class="wrap">
+  <h2 class="title reveal" data-from="down">Services</h2>
+  <div class="grid g3" id="serviceGrid"></div>
+</div></section>
+
+<!-- WORKFLOW -->
+<section id="workflow"><div class="wrap">
+  <h2 class="title reveal" data-from="down">Development Workflow</h2>
+  <ol class="flow" id="flow"></ol>
+</div></section>
+
+<!-- CONTACT -->
+<section id="contact"><div class="wrap">
+  <h2 class="title reveal" data-from="down">Let's Connect</h2>
+  <p class="sub reveal" data-from="down">Have an idea, a question or a project in mind? Pick a platform and say hello.</p>
+  <div class="sgrid" id="socialGrid"></div>
+  <div class="glass contact reveal" data-from="zoom">
+    <div class="clist" id="contactList"></div>
+    <a class="btn" id="contactBtn" href="#contact">Send an Email <i class="fa-solid fa-envelope"></i></a>
+    <p class="note">No contact form is included because it needs a backend (e.g. Formspree or your own API).</p>
+  </div>
+</div></section>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <p>© <span id="year"></span> KS SHAFIN. Built with passion and code.</p>
+  <div class="socials" id="footSocial"></div>
+  <button class="top" id="toTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+</div></footer>
+
+<!-- Certificate lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Certificate preview" hidden>
+  <button class="lb-x" id="lbClose" aria-label="Close preview"><i class="fa-solid fa-xmark"></i></button>
+  <button class="lb-n prev" id="lbPrev" aria-label="Previous certificate"><i class="fa-solid fa-chevron-left"></i></button>
+  <figure class="glass"><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button class="lb-n next" id="lbNext" aria-label="Next certificate"><i class="fa-solid fa-chevron-right"></i></button>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
