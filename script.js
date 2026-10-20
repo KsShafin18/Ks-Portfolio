@@ -58,7 +58,7 @@ const PROJECTS = [
 ];
 
 const ACHIEVEMENTS = [
-  { branch: "technical", category: "Technical Competency", title: "Competent in Web Application Development with Python & Django", description: "Achieved the Competent level in Web Application Development with Python and Django through training at Esikhon Institute under the NSDA-related competency framework.", icon: "fa-code" },
+  { branch: "technical", category: "National Skill Development Authority", title: "Competent in Web Application Development with Python & Django", description: "Achieved the Competent level in Web Application Development with Python and Django through training at Esikhon Institute under the NSDA-related competency framework.", icon: "fa-code" },
   { branch: "awards", category: "Awards & Recognition", title: "1st Place — Computer Science Project Showcase", description: "Secured 1st place in the Computer Science Project Showcase at the Daffodil Technical Institute Innovation & Exhibition for developing a practical, student-focused project.", icon: "fa-trophy", highlight: true },
   { branch: "institutional", category: "Media & Institutional Contribution", title: "Promotional Media Contributor — Daffodil Technical Institute", description: "Contributed to promotional media activities for Daffodil Technical Institute, supporting the institute's promotional content and communication initiatives.", icon: "fa-video" },
   { branch: "communication", category: "Outreach & Communication", title: "Campaign Promotion & Audience Engagement", description: "Participated in several promotional campaigns organized by Daffodil Technical Institute, engaging directly with people, inviting potential participants, encouraging audience participation, and helping increase awareness and engagement with campaign activities. This experience strengthened interpersonal communication, public engagement, persuasion, and teamwork skills.", icon: "fa-bullhorn" },
@@ -438,6 +438,7 @@ document.addEventListener("click", e => {
     achievementButton.setAttribute("aria-expanded", "true");
     detail.hidden = false;
     detail.classList.add("is-open");
+    detail.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
     return;
   }
 
