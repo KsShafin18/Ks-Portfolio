@@ -28,10 +28,9 @@ const CERT_META = {
   // "python-course.png": { title: "Python Course", org: "Issuer name", date: "2025", url: "https://credential-link", repo: "https://github.com/..." }
 };
 
-// 👉 Local fallback certificates (used if GitHub is not configured / fails).
-// Put images in assets/certificates/ and list them here.
+// Local fallback certificates shown only if the folder is empty or unavailable.
 const LOCAL_CERTS = [
-  // { file: "assets/certificates/example.png", title: "Certificate title", org: "Issuer", date: "2025" }
+  { file: "assets/certificates/NSDA WADP Level 4.jpg", title: "NSDA WADP Level 4", org: "", date: "" }
 ];
 
 // 👉 PROJECTS — add real projects here. `sample:true` marks placeholder cards; delete them.
@@ -69,6 +68,32 @@ const ABOUT_CARDS = [
   ["fa-microchip", "Technology", "Curious about modern web tools, databases and clean architecture."],
   ["fa-film", "Creative Media", "Video editing and presentation skills that add polish."]
 ];
+const EDUCATION = [
+  {
+    degree: "Diploma in Computer Science and Technology",
+    institution: "Daffodil Technical Institute",
+    status: "Currently Studying",
+    date: "Present",
+    description: "Currently pursuing studies in Computer Science and Technology, focusing on developing technical knowledge, programming skills, and a strong foundation in information technology.",
+    current: true
+  },
+  {
+    degree: "Higher Secondary Certificate (HSC)",
+    institution: "Civil Aviation School and College",
+    status: "Completed",
+    date: "2023",
+    description: "Completed the Higher Secondary Certificate with a strong foundation in academic studies.",
+    current: false
+  },
+  {
+    degree: "Secondary School Certificate (SSC)",
+    institution: "Monipur High School and College, Branch - 03",
+    status: "Completed",
+    date: "2021",
+    description: "Completed the Secondary School Certificate and built the foundation for further academic growth.",
+    current: false
+  }
+];
 const SERVICES = [
   ["fa-globe", "Website Development", "Fast, responsive websites built from scratch."],
   ["fa-server", "Backend Development", "Server-side logic with Python/Django or Node.js."],
@@ -100,6 +125,20 @@ function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.ad
 /* ---------- 3. RENDER DATA-DRIVEN SECTIONS ---------- */
 function render() {
   $("#aboutCards").innerHTML = ABOUT_CARDS.map(([i, t, d]) => `<article class="glass card reveal"><i class="fa-solid ${i} ic"></i><h3>${t}</h3><p>${d}</p></article>`).join("");
+  $("#educationTimeline").innerHTML = EDUCATION.map((item, index) => `
+    <article class="edu-item glass ${item.current ? "current" : ""} reveal" data-from="up" style="--d:${index * 0.08}s">
+      <div class="edu-marker"><span></span></div>
+      <div class="edu-content">
+        <div class="edu-head">
+          <span class="edu-badge ${item.current ? "current" : ""}">${item.current ? "Current" : item.date}</span>
+          <span class="edu-status">${esc(item.status)}</span>
+        </div>
+        <h3>${esc(item.degree)}</h3>
+        <p class="edu-institution"><i class="fa-solid fa-school"></i>${esc(item.institution)}</p>
+        <p class="edu-desc">${esc(item.description)}</p>
+      </div>
+    </article>
+  `).join("");
   $("#serviceGrid").innerHTML = SERVICES.map(([i, t, d]) => `<article class="glass card reveal"><i class="fa-solid ${i} ic"></i><h3>${t}</h3><p>${d}</p></article>`).join("");
   $("#flow").innerHTML = WORKFLOW.map(([t, d], i) => `<li class="step reveal"><b>${i + 1}</b><div><h3>${t}</h3><span>${d}</span></div></li>`).join("");
 
@@ -157,24 +196,44 @@ async function fetchGitHub() {
   return data.filter(x => x.type === "file" && /\.(png|jpe?g|webp)$/i.test(x.name)).map(x => ({ name: x.name, src: x.download_url }));
 }
 
+async function fetchDirectoryCertificates() {
+  const res = await fetch("/api/certificates", { headers: { Accept: "application/json" } });
+  if (!res.ok) throw new Error("catalog");
+  const data = await res.json();
+  if (!Array.isArray(data)) throw new Error("catalog");
+  return data;
+}
+
 async function loadCerts() {
   const st = $("#certState"), note = $("#certNote");
   const local = normalise(LOCAL_CERTS.map(c => ({ name: c.file.split("/").pop(), src: c.file, title: c.title, org: c.org, date: c.date })));
-  const configured = !/^YOUR_/.test(CONFIG.GITHUB_OWNER) && !/^YOUR_/.test(CONFIG.GITHUB_REPO);
-  let msg = "";
+
   stateBox(st, "fa-spinner fa-spin", "Loading certificates…");
-  if (configured) {
-    try {
-      certs = normalise(await fetchGitHub());
-      note.textContent = `Loaded from github.com/${CONFIG.GITHUB_OWNER}/${CONFIG.GITHUB_REPO}`;
-    } catch (e) {
-      msg = { rate: "GitHub's request limit was reached. Please try again in a little while.", notfound: "Could not find that folder. Check the owner, repository and folder name. Private repositories cannot be read from the browser.", http: "GitHub could not be reached right now." }[e.message] || "GitHub could not be reached. Check your connection.";
+
+  try {
+    const folderCerts = await fetchDirectoryCertificates();
+    if (!folderCerts.length) {
+      throw new Error("empty");
     }
-  } else note.textContent = "Add your GitHub details in CONFIG (script.js) to load certificates automatically.";
-  if (!certs.length) certs = local;
-  if (msg && certs.length) msg += " Showing local certificates instead.";
-  if (certs.length) stateBox(st, "fa-triangle-exclamation", msg);
-  else stateBox(st, msg ? "fa-triangle-exclamation" : "fa-certificate", msg || "No certificates yet. Add images to your GitHub folder or the LOCAL_CERTS list.");
+
+    certs = normalise(folderCerts.map(c => ({
+      name: c.name || c.title || c.src.split("/").pop(),
+      src: c.src,
+      title: c.title || c.name || prettify(c.src.split("/").pop()),
+      org: c.org || "",
+      date: c.date || ""
+    })));
+
+    note.textContent = "Loaded automatically from the certificates folder.";
+    stateBox(st, "fa-check-circle", "Certificates loaded.");
+  } catch (e) {
+    certs = local;
+    note.textContent = "Add JPG images to assets/certificates/ and refresh to show them automatically.";
+    if (!local.length) {
+      stateBox(st, "fa-certificate", "No certificates yet.");
+    }
+  }
+
   $("#certGrid").innerHTML = certs.map((c, i) => `
     <button class="glass cert reveal" data-from="up" data-i="${i}" style="--d:${(i % 6) * .07}s" aria-label="Open ${esc(c.title)}">
       <div class="thumb"><img src="${esc(c.src)}" alt="Certificate: ${esc(c.title)}" loading="lazy"></div>
