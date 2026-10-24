@@ -54,6 +54,16 @@ const PROJECTS = [
     github: "",
     demo: "https://dynamic-lab-report-generator-for-dt.vercel.app/",
     award: "Most Popular"
+  },
+  {
+    name: "My DTI",
+    short: "DTI শিক্ষার্থীদের জন্য একটি ডিজিটাল ক্যাম্পাস কম্প্যানিয়ন প্ল্যাটফর্ম, যা বর্তমানে development stage-এ রয়েছে।",
+    details: "My DTI হলো Daffodil Technical Institute (DTI)-এর শিক্ষার্থীদের জন্য একটি পরিকল্পিত ডিজিটাল ক্যাম্পাস কম্প্যানিয়ন প্ল্যাটফর্ম। এর লক্ষ্য ডিজিটাল ক্লাস রুটিন, শিক্ষকদের তথ্য, শ্রেণিকক্ষের বিবরণ, স্মার্ট নোটস, একাডেমিক রিমাইন্ডার, অ্যাসাইনমেন্ট প্ল্যানার ও পরীক্ষার কাউন্টডাউনের মতো সুবিধা এক জায়গায় নিয়ে আসা।\n\nআধুনিক প্রযুক্তির সঙ্গে শিক্ষার্থীদের যুক্ত করে তাদের শিক্ষাজীবনকে আরও স্মার্ট, গোছানো ও কার্যকর করে তোলাই My DTI-এর মূল লক্ষ্য।",
+    tags: ["Campus App", "Student Platform", "In Development"],
+    image: "assets/projects/3.jpg",
+    github: "",
+    demo: "",
+    award: "Upcoming Project"
   }
 ];
 
