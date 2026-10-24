@@ -222,7 +222,7 @@ function render() {
   $("#projectGrid").innerHTML = PROJECTS.length ? PROJECTS.map((p, index) => {
     const imagePath = getProjectImagePath(index);
     return `
-      <article class="glass proj reveal" data-from="up">
+      <article class="glass proj reveal" data-from="up" tabindex="0" aria-expanded="false" aria-controls="projectDetails${index}">
         <div class="thumb">
           ${imagePath ? `<img class="proj-thumb-image" src="${esc(imagePath)}" alt="${esc(p.name)} thumbnail" loading="lazy">` : `<div class="project-fallback"><i class="fa-solid fa-laptop-code"></i></div>`}
           ${p.award ? `<span class="badge">${esc(p.award)}</span>` : ""}
@@ -239,7 +239,7 @@ function render() {
             ${p.github ? `<a class="proj-link" href="${esc(p.github)}" target="_blank" rel="noopener">View on GitHub <i class="fa-solid fa-arrow-right"></i></a>` : ""}
             ${p.demo && !p.github ? `<a class="proj-link emphasize" href="${esc(p.demo)}" target="_blank" rel="noopener">View Site <i class="fa-solid fa-arrow-right"></i></a>` : ""}
           </div>
-          <div class="proj-extra" hidden>
+          <div class="proj-extra" id="projectDetails${index}" hidden>
             <p>${esc(p.details)}</p>
             ${p.demo ? `<a class="proj-link emphasize" href="${esc(p.demo)}" target="_blank" rel="noopener">Click Here to Visit <i class="fa-solid fa-arrow-right"></i></a>` : ""}
           </div>
@@ -466,11 +466,29 @@ document.addEventListener("click", e => {
   const toggleBtn = e.target.closest(".proj-toggle");
   if (toggleBtn) {
     const card = toggleBtn.closest(".proj");
-    const extra = card.querySelector(".proj-extra");
-    const isHidden = extra.hidden;
-    extra.hidden = !isHidden;
-    toggleBtn.textContent = isHidden ? "Less Info" : "More Info";
-    toggleBtn.classList.toggle("open", isHidden);
+    toggleProjectDetails(card);
+    return;
+  }
+
+  const projectCard = e.target.closest(".proj");
+  if (projectCard && !e.target.closest("a, button, input, select, textarea, summary")) {
+    toggleProjectDetails(projectCard);
+  }
+});
+function toggleProjectDetails(card) {
+  const extra = card.querySelector(".proj-extra");
+  const toggleBtn = card.querySelector(".proj-toggle");
+  const isHidden = extra.hidden;
+  extra.hidden = !isHidden;
+  card.setAttribute("aria-expanded", String(isHidden));
+  toggleBtn.textContent = isHidden ? "Less Info" : "More Info";
+  toggleBtn.classList.toggle("open", isHidden);
+}
+document.addEventListener("keydown", e => {
+  const card = e.target.closest(".proj");
+  if (card && e.target === card && (e.key === "Enter" || e.key === " ")) {
+    e.preventDefault();
+    toggleProjectDetails(card);
   }
 });
 $("#toTop").onclick = () => scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
