@@ -91,7 +91,7 @@ const ACHIEVEMENT_BRANCHES = [
 const SKILLS = [
   { cat: "Programming Languages", icon: "fa-code", items: ["Python|dev:python", "JavaScript|dev:javascript", "HTML5|dev:html5", "CSS3|dev:css3", "SQL|fa-solid fa-database"] },
   { cat: "Backend Development", icon: "fa-server", items: ["Django|dev:django:plain", "Django REST Framework|fa-solid fa-plug", "Node.js|dev:nodejs", "Express.js|dev:express", "REST APIs|fa-solid fa-network-wired"] },
-  { cat: "Frontend Development", icon: "fa-laptop-code", items: ["React|dev:react", "Responsive Web Design|fa-solid fa-mobile-screen", "Modern JavaScript|dev:javascript", "Tailwind CSS|dev:tailwindcss", "Bootstrap|dev:bootstrap"] },
+  { cat: "Frontend Development", icon: "fa-laptop-code", items: ["React|dev:react", "Vite|dev:vitejs", "Responsive Web Design|fa-solid fa-mobile-screen", "Modern JavaScript|dev:javascript", "Tailwind CSS|dev:tailwindcss", "Bootstrap|dev:bootstrap"] },
   { cat: "Databases", icon: "fa-database", items: ["MySQL|dev:mysql", "SQLite|dev:sqlite"] },
   { cat: "Package Managers & Development Tools", icon: "fa-screwdriver-wrench", items: ["npm|dev:npm:original-wordmark", "pnpm|dev:pnpm", "Git|dev:git", "GitHub|dev:github", "VS Code|dev:vscode", "pip|dev:python"] },
   { cat: "Office & Productivity", icon: "fa-briefcase", items: ["Microsoft Word|fa-solid fa-file-word", "Microsoft Excel|fa-solid fa-file-excel", "Microsoft PowerPoint|fa-solid fa-file-powerpoint", "Microsoft Office|fa-brands fa-microsoft", "Document Formatting|fa-solid fa-file-lines", "Spreadsheet Management|fa-solid fa-table"] },
@@ -145,7 +145,16 @@ const SERVICES = [
   ["fa-mobile-screen", "Responsive UI Development", "Interfaces that work on every screen size."],
   ["fa-film", "Video Ad Editing", "Short-form edits and social media ads."]
 ];
-const TYPED_WORDS = ["Full-Stack Developer", "Python & Django Developer", "JavaScript Developer", "Creative Video Editor"];
+const TYPED_WORDS = ["Full-Stack Web Developer", "Frontend Developer", "Backend Developer", "Python & Django Developer", "Creative Video Editor"];
+const ORBIT_SKILLS = [
+  { name: "Django", icon: "django/django-plain.svg", mono: true },
+  { name: "Python", icon: "python/python-original.svg" },
+  { name: "JavaScript", icon: "javascript/javascript-original.svg" },
+  { name: "Node.js", icon: "nodejs/nodejs-original.svg" },
+  { name: "React", icon: "react/react-original.svg" },
+  { name: "Vite", icon: "vitejs/vitejs-original.svg" },
+  { name: "Express.js", icon: "express/express-original.svg", mono: true },
+];
 
 /* ---------- 2. HELPERS ---------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -421,6 +430,30 @@ function initTyped() {
   })();
 }
 
+function initOrbitSkills() {
+  if (reduced) return;
+  const chips = [...document.querySelectorAll("[data-skill-chip]")];
+  let step = 0;
+  setInterval(() => {
+    chips.forEach((chip, index) => {
+      const skill = ORBIT_SKILLS[(index + step) % ORBIT_SKILLS.length];
+      setTimeout(() => {
+        const image = $("img", chip);
+        chip.classList.add("is-changing");
+        setTimeout(() => {
+          image.src = `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${skill.icon}`;
+          image.alt = `${skill.name} logo`;
+          image.classList.toggle("mono", Boolean(skill.mono));
+          chip.title = skill.name;
+          chip.classList.toggle("mono", Boolean(skill.mono));
+          chip.classList.remove("is-changing");
+        }, 330);
+      }, index * 240);
+    });
+    step = (step + 1) % ORBIT_SKILLS.length;
+  }, 3600);
+}
+
 function initParticles() {
   if (reduced) return; const box = $("#particles"), n = innerWidth < 700 ? 10 : 22;
   for (let i = 0; i < n; i++) { const s = document.createElement("span"), z = 1 + Math.random() * 2.5; s.style.cssText = `left:${Math.random() * 100}%;width:${z}px;height:${z}px;animation-duration:${14 + Math.random() * 18}s;animation-delay:${-Math.random() * 25}s`; box.appendChild(s); }
@@ -508,15 +541,8 @@ function initPointer() {
     el.addEventListener("pointermove", e => { if (!el.classList.contains("done")) return; const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; el.style.transform = `perspective(800px) rotateX(${-y * 7}deg) rotateY(${x * 7}deg) translateY(-5px)`; }, { passive: true });
     el.addEventListener("pointerleave", () => { el.style.transform = ""; });
   });
-  // Hero mouse-follow: one rAF loop that eases toward the pointer and stops itself when settled
-  const orbit = $(".orbit"), hero = $("#home"); let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, vis = true;
-  new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(hero);
-  const loop = () => { cx += (tx - cx) * .08; cy += (ty - cy) * .08; orbit.style.setProperty("--mx", cx.toFixed(3)); orbit.style.setProperty("--my", cy.toFixed(3)); raf = Math.abs(tx - cx) + Math.abs(ty - cy) > .002 ? requestAnimationFrame(loop) : 0; };
-  const kick = () => { raf || (raf = requestAnimationFrame(loop)); };
-  hero.addEventListener("pointermove", e => { if (!vis) return; tx = e.clientX / innerWidth * 2 - 1; ty = e.clientY / innerHeight * 2 - 1; kick(); }, { passive: true });
-  hero.addEventListener("pointerleave", () => { tx = ty = 0; kick(); });
 }
 
 /* ---------- 7. INIT ---------- */
 $("#year").textContent = new Date().getFullYear();
-render(); observe(); initNav(); initPointer(); initTyped(); initParticles(); loadProjectImages(); loadCerts();
+render(); observe(); initNav(); initPointer(); initTyped(); initOrbitSkills(); initParticles(); loadProjectImages(); loadCerts();
