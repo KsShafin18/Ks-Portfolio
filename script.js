@@ -89,7 +89,7 @@ const ACHIEVEMENT_BRANCHES = [
 
 // 👉 SKILLS — "Name|icon". icon = "dev:name[:variant]" (Devicon logo) or a Font Awesome class.
 const SKILLS = [
-  { cat: "Programming Languages", icon: "fa-code", items: ["Python|dev:python", "JavaScript|dev:javascript", "HTML5|dev:html5", "CSS3|dev:css3", "SQL|fa-solid fa-database"] },
+  { cat: "Programming Languages", icon: "fa-code", items: ["Python|dev:python", "JavaScript|dev:javascript", "SQL|fa-solid fa-database"] },
   { cat: "Backend Development", icon: "fa-server", items: ["Django|dev:django:plain", "Django REST Framework|fa-solid fa-plug", "Node.js|dev:nodejs", "Express.js|dev:express", "REST APIs|fa-solid fa-network-wired"] },
   { cat: "Frontend Development", icon: "fa-laptop-code", items: ["React|dev:react", "Vite|dev:vitejs", "Responsive Web Design|fa-solid fa-mobile-screen", "Modern JavaScript|dev:javascript", "Tailwind CSS|dev:tailwindcss", "Bootstrap|dev:bootstrap"] },
   { cat: "Databases", icon: "fa-database", items: ["MySQL|dev:mysql", "SQLite|dev:sqlite"] },
